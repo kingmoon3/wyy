@@ -162,16 +162,12 @@ def download_song(sid):
 def main():
     artist = input("请输入需要查询的歌手名：")
     slist = search(artist)
-    try:
-        i = int(input("请输入需要下载的歌曲序号（如输入-1则退出程序）："))
-    except ValueError:
-        i = int(input("您输入的好像不是序号哦，请重新输入："))
-    if i != -1:
-        sid = slist[i - 1].get("id")
+    for song in slist:
+        sid = song.get("id")
         url = download_song(sid)
         if url is not None:
             print("已获取到下载链接：", url, "\n正在为您下载.......")
-            sname = slist[i - 1].get("name")
+            sname = song.get("name")
             form = url.split('.')[-1][:3]
             with open(artist + '-' + sname + '.' + form, 'wb') as f:
                 f.write(requests.get(url).content)
@@ -179,11 +175,7 @@ def main():
             print("下载成功！")
         else:
             print("未获取到下载链接，可能是VIP专享歌曲！")
-    else:
-        print("感谢您的使用，再见！")
-        quit()
 
 
 if __name__ == '__main__':
-    while True:
-        main()
+    main()
