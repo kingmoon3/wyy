@@ -86,8 +86,11 @@ def search(artist):
     i = 0
     for song in songs:
         i = i + 1
-        print(i, song['name'])
-        sid_dic = {"id": song['id'], 'name': song['name']}
+        print(i, song['ar'][0]['name'] + '-' + song['name'])
+        sid_dic = {
+            "id": song['id'],
+            'name': song['name'],
+            'artist': song['ar'][0]['name']}
         sid_list.append(sid_dic)
     return sid_list
 # print(sid_list[1].get("id"))
@@ -173,7 +176,8 @@ def main():
             print("已获取到下载链接：", url, "\n正在为您下载.......")
             sname = slist[i - 1].get("name")
             form = url.split('.')[-1][:3]
-            with open(artist + '-' + sname + '.' + form, 'wb') as f:
+            artist = slist[i - 1].get('artist')
+            with open('./song/' + artist + '-' + sname + '.' + form, 'wb') as f:
                 f.write(requests.get(url).content)
                 f.close()
             print("下载成功！")
